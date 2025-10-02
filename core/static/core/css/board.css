@@ -1,0 +1,81 @@
+/* Fondo y configuración general */
+body {
+    background-color: #f1f1f1;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor del pinboard */
+.pinboard-container {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+/* Pinboard estilo corcho */
+.pinboard {
+    width: 90%;
+    height: 600px;
+    background-color: #deb887; /* Color corcho */
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Estilo para las notas */
+.note {
+    background-color: #ffeb3b; /* Color amarillo tipo post-it */
+    width: 250px;
+    height: 300px;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    position: relative;
+    transform: rotate(4deg); /* Efecto de rotación para simular el aspecto */
+    transition: transform 0.3s ease;
+}
+
+.note:hover {
+    transform: rotate(0deg); /* Restaurar posición al hacer hover */
+}
+
+/* Header de la nota */
+.note-header h5 {
+    font-size: 18px;
+    color: #3e2723; /* Color oscuro para el texto */
+}
+
+/* Contenido de la nota */
+.note-content p {
+    font-size: 14px;
+    color: #3e2723;
+}
+
+/* Estilo de los pines (alfileres) */
+.note::before {
+    content: "📍";
+    font-size: 30px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Header del pinboard */
+.pinboard h3 {
+    text-align: center;
+    color: #3e2723;
+}
+
+/* Títulos en la página */
+h3 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #3e2723;
+    margin-bottom: 20px;
+}

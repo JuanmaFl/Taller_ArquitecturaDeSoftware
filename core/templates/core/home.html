@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Bienvenido - Senilit{% endblock %}
+
+{% block content %}
+<div class="pinboard-container">
+    <div class="pinboard">
+        <div class="note" id="note1">
+            <div class="note-header">
+                <h5>Bienvenida</h5>
+            </div>
+            <div class="note-content">
+                <p>¡Bienvenido a Senilit, el espacio para tus anuncios!</p>
+            </div>
+        </div>
+
+        {% if request.user.is_authenticated %}
+            <div class="note" id="note2">
+                <div class="note-header">
+                    <h5>Saludos, {{ user.username | upper }}</h5>
+                </div>
+                <div class="note-content">
+                    <p>Estamos felices de que estés aquí.</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="note" id="note3">
+                <div class="note-header">
+                    <h5>Iniciar sesión</h5>
+                </div>
+                <div class="note-content">
+                    <p>Inicia sesión para explorar más.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
