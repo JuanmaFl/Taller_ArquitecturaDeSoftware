@@ -1,38 +1,64 @@
-{% extends 'core/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Bienvenido - Senilit{% endblock %}
+{% block title %}Inicio - Senilit{% endblock %}
 
 {% block content %}
-<div class="pinboard-container">
-    <div class="pinboard">
-        <div class="note" id="note1">
-            <div class="note-header">
-                <h5>Bienvenida</h5>
-            </div>
-            <div class="note-content">
-                <p>¡Bienvenido a Senilit, el espacio para tus anuncios!</p>
+<div class="hero fade-in-up">
+    <h1><i class="bi bi-star-fill"></i> Bienvenido a Senilit</h1>
+    <p>Tu plataforma de gestión de productos con patrones de diseño</p>
+    {% if not user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-light btn-lg me-2">
+                <i class="bi bi-person-plus"></i> Registrarse
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="content-wrapper fade-in-up">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <div class="mb-3">
+                    <i class="bi bi-gear-fill" style="font-size: 3rem; color: var(--primary-color);"></i>
+                </div>
+                <h3>Factory Pattern</h3>
+                <p class="text-muted">Creación flexible de productos por categorías</p>
             </div>
         </div>
-
-        {% if request.user.is_authenticated %}
-            <div class="note" id="note2">
-                <div class="note-header">
-                    <h5>Saludos, {{ user.username | upper }}</h5>
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <div class="mb-3">
+                    <i class="bi bi-bell-fill" style="font-size: 3rem; color: var(--secondary-color);"></i>
                 </div>
-                <div class="note-content">
-                    <p>Estamos felices de que estés aquí.</p>
-                </div>
+                <h3>Observer Pattern</h3>
+                <p class="text-muted">Sistema de notificaciones automáticas</p>
             </div>
-        {% else %}
-            <div class="note" id="note3">
-                <div class="note-header">
-                    <h5>Iniciar sesión</h5>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center p-4">
+                <div class="mb-3">
+                    <i class="bi bi-shield-check" style="font-size: 3rem; color: #38ef7d;"></i>
                 </div>
-                <div class="note-content">
-                    <p>Inicia sesión para explorar más.</p>
-                </div>
+                <h3>Strategy Pattern</h3>
+                <p class="text-muted">Validaciones personalizadas de datos</p>
             </div>
-        {% endif %}
+        </div>
     </div>
+
+    {% if user.is_authenticated %}
+        <div class="text-center mt-5">
+            <h2 class="mb-4">¿Qué deseas hacer?</h2>
+            <a href="{% url 'products' %}" class="btn btn-primary btn-lg me-2">
+                <i class="bi bi-box-seam"></i> Ver Productos
+            </a>
+            <a href="{% url 'create_product' %}" class="btn btn-success btn-lg">
+                <i class="bi bi-plus-circle"></i> Crear Producto
+            </a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

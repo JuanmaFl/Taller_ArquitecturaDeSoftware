@@ -15,11 +15,12 @@ Including another URLconf
 """
 
 from django.urls import path
-from .views import home, products, register
-
+from .views import home, products, register, create_product, subscribe_newsletter
 
 urlpatterns = [
     path('', home, name='home'),
     path('products/', products, name='products'),
+    path('products/create/', create_product, name='create_product'),  # Nueva ruta
     path('register/', register, name='register'),
+    path('newsletter/subscribe/', subscribe_newsletter, name='subscribe_newsletter'),  # Nueva ruta
 ]

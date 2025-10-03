@@ -1,25 +1,75 @@
-{% extends 'core/base.html' %}
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión - Senilit{% endblock %}
 
 {% block content %}
-
-{% load crispy_forms_tags %}
-
-<h3>LOGIN</h3>
-
-<br>
-
-<form action="" method="post">
-    {% csrf_token %}
-
-    <div class="card mx-auto" style="width: 30rem;">
-      <div class="card-body">
-        <h5 class="card-title">Ingrese sus Credenciales</h5>
-        {{ form | crispy }}
-        <a href={% url 'home' %} class="card-link">Inicio</a>
-        <a href={% url 'register' %} class="card-link">Registrarse</a>
-        <button class="btn btn-sm btn-primary float-end" type="submit">Iniciar Sesión</button>
-      </div>
+<div class="content-wrapper fade-in-up" style="max-width: 500px;">
+    <div class="text-center mb-4">
+        <i class="bi bi-box-arrow-in-right" style="font-size: 4rem; color: var(--primary-color);"></i>
+        <h1 class="mt-3">Iniciar Sesión</h1>
+        <p class="text-muted">Accede a tu cuenta de Senilit</p>
     </div>
-</form>
 
+    <div class="card">
+        <div class="card-body p-4">
+            <form method="POST">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-x-circle"></i>
+                        Usuario o contraseña incorrectos. Por favor, intenta de nuevo.
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">
+                        <i class="bi bi-person"></i> Usuario
+                    </label>
+                    <input type="text" 
+                           name="username" 
+                           class="form-control" 
+                           id="id_username"
+                           placeholder="Tu nombre de usuario"
+                           required
+                           autofocus>
+                </div>
+
+                <div class="mb-4">
+                    <label for="id_password" class="form-label">
+                        <i class="bi bi-lock"></i> Contraseña
+                    </label>
+                    <input type="password" 
+                           name="password" 
+                           class="form-control" 
+                           id="id_password"
+                           placeholder="Tu contraseña"
+                           required>
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <a href="{% url 'password_reset' %}" class="text-decoration-none text-muted">
+                        <i class="bi bi-key"></i> ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+            </form>
+
+            <hr class="my-4">
+
+            <div class="text-center">
+                <p class="mb-0">¿No tienes una cuenta? 
+                    <a href="{% url 'register' %}" class="text-decoration-none">
+                        <i class="bi bi-person-plus"></i> Crear Cuenta
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

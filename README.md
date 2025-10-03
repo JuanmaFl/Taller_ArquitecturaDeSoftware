@@ -1,13 +1,25 @@
+## Actividad 1 - Repositorio
+**Repositorio GitHub:** https://github.com/JuanmaFl/Taller_ArquitecturaDeSoftware
 
+***
+
+## Actividad 2 - Revisión Autocrítica
+
+**Aspectos positivos:**
+- Autenticación funcional con Django
+- Interfaz responsive con Bootstrap
+- Protección CSRF en formularios
+
+**Aspectos a mejorar:**
+- Lógica de autenticación mezclada en vistas (aplicamos inversión de dependencias)
+- Validaciones no reutilizables (aplicamos Strategy Pattern)
+- Sin sistema de notificaciones (implementamos Observer Pattern)
+- Mejora general y limpieza del codigo
 ---
 
-##  Actividad 3 — Inversión de Dependencias:
+## Actividad 3 - Inversión de Dependencias
 
-### Objetivo:
-Aplicar el principio de **Inversión de Dependencias** en una clase del proyecto para desacoplar la lógica de autenticación del controlador (vista), facilitando la reutilización, testeo y escalabilidad.
-
-### Implementación:
-Se creó la clase `AuthService` en `core/services/auth_service.py`, que encapsula la lógica de autenticación y login. La vista `register` ahora depende de esta abstracción en lugar de funciones concretas.
+Separamos la lógica de autenticación de las vistas.
 
 ```python
 # core/services/auth_service.py
@@ -23,43 +35,28 @@ class AuthService:
 
 ```python
 # core/views.py
-from .services.auth_service import AuthService
-
 def register(request):
-    ...
-    if user_creation_form.is_valid():
-        user_creation_form.save()
-        auth_service = AuthService()
-        user = auth_service.authenticate_and_login(
-            request,
-            user_creation_form.cleaned_data['username'],
-            user_creation_form.cleaned_data['password1']
-        )
-        return redirect('home')
+    if request.method == 'POST':
+        form = CustomUserCreationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            auth_service = AuthService()
+            auth_service.authenticate_and_login(
+                request,
+                form.cleaned_data['username'],
+                form.cleaned_data['password1']
+            )
+            return redirect('home')
 ```
 
-### Beneficios:
-- Desacoplamiento entre vista y lógica de autenticación.
-- Reusabilidad del servicio en otras vistas.
-- Facilidad para pruebas unitarias.
-- Mayor claridad y mantenibilidad del código.
+**Beneficio:** Vista desacoplada, código reutilizable y testeable.
 
----
+***
 
-## Actividad 4 — Aplicación de Patrón de Diseño (Strategy):
+## Actividad 4 - Patrón Strategy (Python)
 
-### Objetivo:
-Aplicar el patrón de diseño **Strategy** para encapsular reglas de validación en el formulario de registro, permitiendo agregar nuevas validaciones sin modificar la clase base.
+Validaciones reutilizables con Strategy Pattern.
 
-### Proceso de decisión:
-Se eligió el patrón Strategy porque:
-- El formulario `CustomUserCreationForm` requiere múltiples validaciones.
-- Cada validación puede cambiar o crecer con el tiempo.
-- Se busca mantener el formulario limpio y extensible.
-
-### Implementación:
-
-#### Interfaz base:
 ```python
 # core/strategies/validation_strategy.py
 from abc import ABC, abstractmethod
@@ -70,7 +67,6 @@ class ValidationStrategy(ABC):
         pass
 ```
 
-#### Estrategia concreta:
 ```python
 # core/strategies/email_unique_strategy.py
 from django.contrib.auth.models import User
@@ -80,18 +76,16 @@ class EmailUniqueStrategy(ValidationStrategy):
     def validate(self, form):
         email = form.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            form.add_error('email', 'Este correo electrónico ya está registrado')
+            form.add_error('email', 'Este correo ya está registrado')
 ```
 
-#### Integración en el formulario:
 ```python
 # core/forms.py
 class CustomUserCreationForm(UserCreationForm):
-    ...
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.validation_strategies = [EmailUniqueStrategy()]
-
+    
     def is_valid(self):
         valid = super().is_valid()
         if valid:
@@ -102,12 +96,66 @@ class CustomUserCreationForm(UserCreationForm):
         return valid
 ```
 
-### Beneficios:
-- Validaciones desacopladas y reutilizables.
-- Fácil extensión con nuevas estrategias.
-- Código más limpio y mantenible.
-- Mejora la testabilidad del formulario.
+**Beneficio:** Fácil agregar validaciones sin modificar código existente.
+
+***
+
+## Actividad 5 - Patrones Django
+
+### Factory Pattern
+Crea productos según categoría automáticamente.
+
+```python
+# core/factories/product_factory.py
+class ProductFactoryProvider:
+    _factories = {
+        'electronics': ElectronicsProductFactory,
+        'clothing': ClothingProductFactory,
+    }
+    
+    @classmethod
+    def get_factory(cls, category):
+        return cls._factories[category]()
+```
+
+### Observer Pattern
+Notifica a suscriptores cuando se crea un producto.
+
+```python
+# core/services/notification_service.py
+class NotificationService:
+    def __init__(self):
+        self._observers = [EmailNotificationObserver(), ConsoleNotificationObserver()]
+    
+    def notify_new_product(self, product):
+        for observer in self._observers:
+            observer.update(product)
+```
+
+**Beneficio:** Desacoplamiento entre creación y notificaciones.
+
+***
+
+## BONO - Newsletter
+
+Sistema de notificaciones que avisa cuando se agregan productos.
+
+**Modelo:**
+```python
+class NewsletterSubscriber(models.Model):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+```
+
+**Vista:**
+```python
+def subscribe_newsletter(request):
+    if request.method == 'POST':
+        form = NewsletterSubscriptionForm(request.POST)
+        if form.is_valid():
+            NewsletterSubscriber.objects.create(email=form.cleaned_data['email'])
+```
+
+Usa Factory + Observer para notificar automáticamente.
 
 ---
-
-¿Quieres que te ayude a agregar una sección de instalación, ejecución o pruebas al README? También puedo ayudarte a redactar la introducción del proyecto si estás preparando la entrega final.

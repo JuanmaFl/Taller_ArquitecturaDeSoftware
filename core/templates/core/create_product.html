@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Producto - Senilit{% endblock %}
+
+{% block content %}
+<div class="content-wrapper fade-in-up" style="max-width: 800px;">
+    <div class="mb-4">
+        <a href="{% url 'products' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Productos
+        </a>
+    </div>
+
+    <div class="text-center mb-4">
+        <i class="bi bi-plus-circle-fill" style="font-size: 4rem; color: var(--primary-color);"></i>
+        <h1 class="mt-3">Crear Nuevo Producto</h1>
+        <p class="text-muted">Usa el Factory Pattern para crear productos por categoría</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                    <label for="{{ form.name.id_for_label }}" class="form-label fw-bold">
+                        <i class="bi bi-tag-fill"></i> Nombre del Producto *
+                    </label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="text-danger mt-2">
+                            <i class="bi bi-exclamation-circle"></i> {{ form.name.errors|first }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.description.id_for_label }}" class="form-label fw-bold">
+                        <i class="bi bi-text-paragraph"></i> Descripción *
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="text-danger mt-2">
+                            <i class="bi bi-exclamation-circle"></i> {{ form.description.errors|first }}
+                        </div>
+                    {% endif %}
+                    <small class="text-muted">Describe detalladamente las características del producto</small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <label for="{{ form.category.id_for_label }}" class="form-label fw-bold">
+                            <i class="bi bi-collection-fill"></i> Categoría *
+                        </label>
+                        {{ form.category }}
+                        {% if form.category.errors %}
+                            <div class="text-danger mt-2">
+                                <i class="bi bi-exclamation-circle"></i> {{ form.category.errors|first }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1">
+                            El Factory Pattern creará el producto según la categoría
+                        </small>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="{{ form.price.id_for_label }}" class="form-label fw-bold">
+                            <i class="bi bi-currency-dollar"></i> Precio *
+                        </label>
+                        {{ form.price }}
+                        {% if form.price.errors %}
+                            <div class="text-danger mt-2">
+                                <i class="bi bi-exclamation-circle"></i> {{ form.price.errors|first }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label for="{{ form.stock.id_for_label }}" class="form-label fw-bold">
+                            <i class="bi bi-box-seam-fill"></i> Stock *
+                        </label>
+                        {{ form.stock }}
+                        {% if form.stock.errors %}
+                            <div class="text-danger mt-2">
+                                <i class="bi bi-exclamation-circle"></i> {{ form.stock.errors|first }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="alert alert-info border-0 shadow-sm">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-lightbulb-fill me-3" style="font-size: 2rem; color: #ffc107;"></i>
+                        <div>
+                            <h6 class="mb-2"><strong>Patrones de Diseño Aplicados:</strong></h6>
+                            <ul class="mb-0">
+                                <li><strong>Factory Pattern:</strong> Crea el producto según su categoría automáticamente</li>
+                                <li><strong>Observer Pattern:</strong> Notifica a todos los suscriptores del newsletter</li>
+                                <li><strong>Strategy Pattern:</strong> Valida los datos del formulario con estrategias personalizadas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a href="{% url 'products' %}" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success btn-lg px-5">
+                        <i class="bi bi-check-circle-fill"></i> Crear Producto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card informativa sobre el proceso -->
+    <div class="card mt-4 border-0 bg-light">
+        <div class="card-body">
+            <h5 class="card-title">
+                <i class="bi bi-info-circle-fill text-primary"></i> ¿Qué sucede al crear un producto?
+            </h5>
+            <ol class="mb-0">
+                <li>El <strong>Factory Pattern</strong> selecciona la factory correcta según la categoría</li>
+                <li>Se crea el producto en la base de datos</li>
+                <li>El <strong>Observer Pattern</strong> notifica a todos los observadores:
+                    <ul>
+                        <li><strong>EmailNotificationObserver:</strong> Envía emails a suscriptores</li>
+                        <li><strong>ConsoleNotificationObserver:</strong> Muestra información en consola</li>
+                    </ul>
+                </li>
+                <li>Se redirige a la lista de productos con un mensaje de éxito</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 2px solid #e0e0e0;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        transform: translateY(-2px);
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+    }
+
+    label {
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
