@@ -1,6 +1,6 @@
 ## Actividad 1 - Repositorio
 **Repositorio GitHub:** https://github.com/JuanmaFl/Taller_ArquitecturaDeSoftware
-
+**Repositorio Original P1 GitHub:** https://github.com/sacostaa1/Senilit/
 ***
 
 ## Actividad 2 - Revisión Autocrítica
